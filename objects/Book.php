@@ -50,11 +50,51 @@
             return $books;
 
         }
-        public function setBook($conn,$name,$surname,$address){
+        public function setBook($post){
+
+            $this->author=$post['author'];
+            $this->title=$post['title'];
+            $this->year=$post['year'];
+            $this->pages=$post['pages'];
+            $this->person_id=$post['person_id'];
+            $conn = $this->connect();
+            // var_dump(  "INSERT INTO `books` (`id`, `author`, `title`, `year`, `pages`, `person_id`)
+            // VALUES (NULL, ".$this->author.", ".$this->title.", ".$this->year.", ".$this->pages.", '4');");die;
+            $conn->query(
+           "INSERT INTO `books` (`id`, `author`, `title`, `year`, `pages`, `person_id`)
+            VALUES (NULL, 'asdf', 'asdfg', '4645', '45', '2');");
+            $conn->query(
+                "INSERT INTO `books` (`id`, `author`, `title`, `year`, `pages`, `person_id`)
+                 VALUES (NULL, '".$this->author."', '".$this->title."', '".$this->year."', '".$this->pages."', '4');"
+            );
+            $this->id = $conn->insert_id;
         }
-        public function updateBook($conn,$name,$surname,$address){
+        public function updateBook($post){
+            $this->author=$post['author'];
+            $this->title=$post['title'];
+            $this->year=$post['year'];
+            $this->pages=$post['pages'];
+            $this->person_id=$post['person_id'];
+            $this->connect()->query(
+                "UPDATE `books` 
+                SET 
+                `author` = '$this->author',
+                `title` = '$this->title',
+                `year` = '$this->year' ,
+                `pages` = '$this->pages'
+                WHERE `books`.`id` = ".$this->id.";"
+            );
+            $this->id = $conn->insert_id;
         }
-        public function deleteBook($conn,$id){
+        public function deleteBook(){
+            $this->connect()->query("DELETE FROM `books` WHERE `books`.`id` = '".$this->id."';");
+            $this->id=0;
+            $this->author="";
+            $this->title="";
+            $this->year="";
+            $this->pages="";
+            $this->person_id="";
+                
 
             return "pavyko istrinti/nepavyko istrinti";
         }

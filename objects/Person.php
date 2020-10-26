@@ -30,28 +30,31 @@
             }
             return $this;
         }
-        public function setPerson($name,$surname,$address){
-            $this->name=$name;
-            $this->surname=$surname;
-            $this->address=$address;
+        public function setPerson($post){
+            $this->name=$post['name'];
+            $this->surname=$post['surname'];
+            $this->address=$post['address'];
             $conn = $this->connect();
             $conn->query(
-               "INSERT INTO `persons` (`id`, `name`, `surname`, `address`) 
-                VALUES (NULL, '".$name."', '".$surname."', '".$address."');");
-               $this->id = $conn->insert_id;
+                "INSERT INTO `persons` (`id`, `name`, `surname`, `address`)
+                 VALUES (NULL, '".$post['name']."', '".$post['surname']."', '".$post['address']."');"
+            );
+          
         }
-        public function updatePerson($name,$surname,$address){
+        public function updatePerson($post){
             $this->connect()->query(
                 "UPDATE `persons` 
                 SET 
-                `name` = '".$name."',
-                `surname` = '".$surname."',
-                `address` = '".$address."' 
-                WHERE `persons`.`id` = ".$this->id.";"
+                `name` = '".$post['name']."',
+                `surname` = '".$post['surname']."',
+                `address` = '".$post['address']."' 
+                WHERE `persons`.`id` = ".$post['person_id'].";"
             );
-            $this->name=$name;
-            $this->surname=$surname;
-            $this->address=$address;
+            $this->name=$post['name'];
+            $this->surname=$post['surname'];
+            $this->address=$post['address'];
+            // var_dump($this);die;
+            $this->id = $conn->insert_id;
         }
         public function deletePerson(){
            if(!$this->connect()->query("DELETE FROM `persons` WHERE `persons`.`id` = '".$this->id."';")){
@@ -64,6 +67,7 @@
             }
         }
 
+    
         public function getAllPeople(){
             $sql = "SELECT * FROM `persons`;";
             $person = new Person();
